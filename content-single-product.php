@@ -10,58 +10,83 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.4.0
+ * @see 	    https://docs.woocommerce.com/document/template-structure/
+ * @author 		WooThemes
+ * @package 	WooCommerce/Templates
+ * @version     3.0.0
  */
 
-defined( 'ABSPATH' ) || exit;
-
-/**
- * Hook: woocommerce_before_single_product.
- *
- * @hooked wc_print_notices - 10
- */
-do_action( 'woocommerce_before_single_product' );
-
-if ( post_password_required() ) {
-	echo get_the_password_form(); // WPCS: XSS ok.
-	return;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
 }
+
+global $product;
+
 ?>
-<div id="product-<?php the_ID(); ?>" <?php wc_product_class(); ?>>
 
-	<?php
-		/**
-		 * Hook: woocommerce_before_single_product_summary.
-		 *
-		 * @hooked woocommerce_show_product_sale_flash - 10
-		 * @hooked woocommerce_show_product_images - 20
-		 */
-		do_action( 'woocommerce_before_single_product_summary' );
-	?>
+<?php
+	/**
+	 * woocommerce_before_single_product hook.
+	 *
+	 * @hooked wc_print_notices - 10
+	 */
+	 do_action( 'woocommerce_before_single_product' );
 
-	<div class="summary entry-summary">
-		<?php
-			/**
-			 * Hook: woocommerce_single_product_summary.
-			 *
-			 * @hooked woocommerce_template_single_title - 5
-			 * @hooked woocommerce_template_single_rating - 10
-			 * @hooked woocommerce_template_single_price - 10
-			 * @hooked woocommerce_template_single_excerpt - 20
-			 * @hooked woocommerce_template_single_add_to_cart - 30
-			 * @hooked woocommerce_template_single_meta - 40
-			 * @hooked woocommerce_template_single_sharing - 50
-			 * @hooked WC_Structured_Data::generate_product_data() - 60
-			 */
-			do_action( 'woocommerce_single_product_summary' );
-		?>
+	 if ( post_password_required() ) {
+	 	echo get_the_password_form();
+	 	return;
+	 }
+?>
+
+			<?php
+				if($tags = $product->get_tag_ids()) {
+					$tag_name = get_term($tags[0])->name;
+				}
+			?>
+
+			<div class="b-product__container-buy row row-wrap" 
+				<?php if($tag_name) echo 'data-action="' . $tag_name . '"'; ?>
+			>
+				<?php
+					/**
+					 * woocommerce_before_single_product_summary hook.
+					 *
+					 * @hooked woocommerce_show_product_sale_flash - 10
+					 * @hooked woocommerce_show_product_images - 20
+					 */
+					do_action( 'woocommerce_before_single_product_summary' );
+				?>
+
+				<div class="col xs-12 sm-7 md-7 product__buy">
+					<?php
+						/**
+						 * woocommerce_single_product_summary hook.
+						 *
+						 * @hooked woocommerce_template_single_title - 5
+						 * @hooked woocommerce_template_single_rating - 10
+						 * @hooked woocommerce_template_single_price - 10
+						 * @hooked woocommerce_template_single_excerpt - 20
+						 * @hooked woocommerce_template_single_add_to_cart - 30
+						 * @hooked woocommerce_template_single_meta - 40
+						 * @hooked woocommerce_template_single_sharing - 50
+						 * @hooked WC_Structured_Data::generate_product_data() - 60
+						 */
+						do_action( 'woocommerce_single_product_summary' );
+					?>
+				</div>
+			</div>
+			
+			<?php
+				do_action('woocommerce_custom_action_for_description');
+			?>
+			
+		</div>
 	</div>
+</section>
 
 	<?php
 		/**
-		 * Hook: woocommerce_after_single_product_summary.
+		 * woocommerce_after_single_product_summary hook.
 		 *
 		 * @hooked woocommerce_output_product_data_tabs - 10
 		 * @hooked woocommerce_upsell_display - 15
@@ -69,6 +94,6 @@ if ( post_password_required() ) {
 		 */
 		do_action( 'woocommerce_after_single_product_summary' );
 	?>
-</div>
+
 
 <?php do_action( 'woocommerce_after_single_product' ); ?>

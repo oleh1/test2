@@ -23,6 +23,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 ?>
 
-<?php if ( $price_html = $product->get_price_html() ) : ?>
-	<span class="price"><?php echo $price_html; ?></span>
-<?php endif; ?>
+
+<?php
+if($product->is_on_sale()) {
+	$price = '<span class="strikethrough-text">' . wc_price($product->get_regular_price()) . '</span> ' . wc_price(wc_get_price_to_display($product));
+} else {
+	$price = wc_price($product->get_price());
+}
+?>
+<h3 class="one-card__price"><?php echo $price; ?></h3>

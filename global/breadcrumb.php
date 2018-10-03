@@ -21,7 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! empty( $breadcrumb ) ) {
+if ( !empty($breadcrumb) && !is_shop() && !is_product_category()) {
+    
 
 	echo $wrap_before;
 

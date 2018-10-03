@@ -11,30 +11,43 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
+ * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.4.0
+ * @version 3.0.0
  */
 
-defined( 'ABSPATH' ) || exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 global $product;
 
-// Ensure visibility.
+// Ensure visibility
 if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
 ?>
-<li <?php wc_product_class(); ?>>
+
+<?php
+	if($tags = $product->get_tag_ids()) {
+		$tag_name = get_term($tags[0])->name;
+	}
+?>
+<?php if(!is_page_template('template-onlyinternet.php') || !is_page_template('template-tezclub.php') || !is_page_template('template-cooltel.php') || ('countries' != get_post_type())) { ?>
+	<li <?php post_class('one-card col xs-6 md-4'); ?>
+		<?php if($tag_name) echo 'data-action="' . $tag_name . '"'; ?>
+	>
+<?php } ?>
 	<?php
 	/**
-	 * Hook: woocommerce_before_shop_loop_item.
+	 * woocommerce_before_shop_loop_item hook.
 	 *
 	 * @hooked woocommerce_template_loop_product_link_open - 10
 	 */
 	do_action( 'woocommerce_before_shop_loop_item' );
 
 	/**
-	 * Hook: woocommerce_before_shop_loop_item_title.
+	 * woocommerce_before_shop_loop_item_title hook.
 	 *
 	 * @hooked woocommerce_show_product_loop_sale_flash - 10
 	 * @hooked woocommerce_template_loop_product_thumbnail - 10
@@ -42,14 +55,14 @@ if ( empty( $product ) || ! $product->is_visible() ) {
 	do_action( 'woocommerce_before_shop_loop_item_title' );
 
 	/**
-	 * Hook: woocommerce_shop_loop_item_title.
+	 * woocommerce_shop_loop_item_title hook.
 	 *
 	 * @hooked woocommerce_template_loop_product_title - 10
 	 */
 	do_action( 'woocommerce_shop_loop_item_title' );
 
 	/**
-	 * Hook: woocommerce_after_shop_loop_item_title.
+	 * woocommerce_after_shop_loop_item_title hook.
 	 *
 	 * @hooked woocommerce_template_loop_rating - 5
 	 * @hooked woocommerce_template_loop_price - 10
@@ -57,11 +70,13 @@ if ( empty( $product ) || ! $product->is_visible() ) {
 	do_action( 'woocommerce_after_shop_loop_item_title' );
 
 	/**
-	 * Hook: woocommerce_after_shop_loop_item.
+	 * woocommerce_after_shop_loop_item hook.
 	 *
 	 * @hooked woocommerce_template_loop_product_link_close - 5
 	 * @hooked woocommerce_template_loop_add_to_cart - 10
 	 */
 	do_action( 'woocommerce_after_shop_loop_item' );
 	?>
-</li>
+<?php if(!is_page_template('template-onlyinternet.php') || !is_page_template('template-tezclub.php') || !is_page_template('template-cooltel.php') || ('countries' != get_post_type())) { ?>
+	</li>
+<?php } ?>

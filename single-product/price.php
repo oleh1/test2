@@ -1,6 +1,6 @@
 <?php
 /**
- * Single Product Price
+ * Single Product Price, including microdata for SEO
  *
  * This template can be overridden by copying it to yourtheme/woocommerce/single-product/price.php.
  *
@@ -22,5 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $product;
 
+if($product->is_on_sale()) {
+	$price = '<span class="strikethrough-text">' . wc_price($product->get_regular_price()) . '</span> ' . wc_price(wc_get_price_to_display($product));
+} else {
+	$price = wc_price($product->get_price());
+}
 ?>
-<p class="price"><?php echo $product->get_price_html(); ?></p>
+<p class="text product__sum-result message">
+	<?php echo $price; ?>
+</p>

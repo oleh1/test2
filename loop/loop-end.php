@@ -15,9 +15,18 @@
  * @package 	WooCommerce/Templates
  * @version     2.0.0
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 ?>
-</ul>
+<?php if(is_product()) { ?>
+	</ul>
+	</div>
+<?php } elseif(is_page_template('template-onlyinternet.php') || is_page_template('template-tezclub.php') || is_page_template('template-cooltel.php') || ('countries' == get_post_type())) { ?>
+	</div>
+	<!--p class="str__link center">
+	<a href="<?php // the_permalink(30); ?>" class="large bold"><?php //pll_e('wherebuy'); ?> <span class="icon-to-right"></span></a>
+	</p-->
+	</section>
+<?php } else { ?>
+	</ul>
+	</div>
+	</div>
+<?php } ?>

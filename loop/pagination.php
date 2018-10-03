@@ -10,37 +10,47 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce/Templates
- * @version 3.3.1
+ * @see 	    https://docs.woocommerce.com/document/template-structure/
+ * @author 		WooThemes
+ * @package 	WooCommerce/Templates
+ * @version     2.2.2
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly
 }
 
-$total   = isset( $total ) ? $total : wc_get_loop_prop( 'total_pages' );
-$current = isset( $current ) ? $current : wc_get_loop_prop( 'current_page' );
-$base    = isset( $base ) ? $base : esc_url_raw( str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) ) );
-$format  = isset( $format ) ? $format : '';
+global $wp_query;
 
-if ( $total <= 1 ) {
+if ( $wp_query->max_num_pages <= 1 ) {
 	return;
 }
 ?>
-<nav class="woocommerce-pagination">
+<nav class="woocommerce-pagination paginator">
 	<?php
-		echo paginate_links( apply_filters( 'woocommerce_pagination_args', array( // WPCS: XSS ok.
-			'base'         => $base,
-			'format'       => $format,
+		echo paginate_links( apply_filters( 'woocommerce_pagination_args', array(
+			'base'         => esc_url_raw( str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) ) ),
+			'format'       => '',
 			'add_args'     => false,
-			'current'      => max( 1, $current ),
-			'total'        => $total,
-			'prev_text'    => '&larr;',
-			'next_text'    => '&rarr;',
-			'type'         => 'list',
+			'current'      => max( 1, get_query_var( 'paged' ) ),
+			'total'        => $wp_query->max_num_pages,
+			'prev_text'    => '',
+			'next_text'    => '',
 			'end_size'     => 3,
 			'mid_size'     => 3,
 		) ) );
 	?>
 </nav>
+
+
+<script>
+	jQuery(document).ready(function() {
+		jQuery('.paginator .page-numbers').each(function() {
+			if(jQuery(this).hasClass('dots')) jQuery(this).addClass('paginator-ellipsis');
+			else jQuery(this).addClass('paginator-item');
+			if(jQuery(this).hasClass('prev')) jQuery(this).addClass('paginator-prev');
+			if(jQuery(this).hasClass('next')) jQuery(this).addClass('paginator-next');
+			if(jQuery(this).hasClass('current')) jQuery(this).addClass('paginator-current');
+		});
+	});
+</script>

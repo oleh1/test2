@@ -13,11 +13,18 @@
  * @see 	    https://docs.woocommerce.com/document/template-structure/
  * @author 		WooThemes
  * @package 	WooCommerce/Templates
- * @version     3.3.0
+ * @version     2.0.0
  */
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 ?>
-<ul class="products columns-<?php echo esc_attr( wc_get_loop_prop( 'columns' ) ); ?>">
+
+<?php if(is_product()) { ?>
+	<div class="b-similar__viewport">
+	<ul class="b-similar__container row row-wrap">
+<?php } elseif(is_page_template('template-onlyinternet.php') || is_page_template('template-tezclub.php') || is_page_template('template-cooltel.php') || ('countries' == get_post_type())) { ?>
+	<section class="b-buy">
+	<div class="wrap">
+<?php } else { ?>
+	<div class="b-shop__cards">
+	<div class="b-shop__cards-viewport">
+	<ul class="b-shop__cards-container row row-wrap">
+<?php } ?>
